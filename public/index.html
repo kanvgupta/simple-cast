@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainView - Share Cast Commands Easily</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="description" content="ChainView makes it easy to share Foundry Cast commands with others. Create, organize, and share commands with a simple URL - no account required.">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><i class="fas fa-terminal"></i> ChainView</h1>
+      <p class="tagline">Share blockchain commands effortlessly</p>
+      <a href="#getting-started" class="cta-button">Get Started <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro container">
+      <h2>What is ChainView?</h2>
+      <p>
+        ChainView makes it easy to share <a href="https://book.getfoundry.sh/cast/" target="_blank">Foundry Cast commands</a> 
+        with others. Create, organize, and share blockchain interactions with a simple URL - no account required.
+      </p>
+      
+      <div class="demo">
+        <div class="demo-header">
+          <i class="fas fa-code"></i>
+          <h3>Try it with our CLI</h3>
+        </div>
+        <pre><code>$ npm install -g chainview
+$ chainview submit "cast call --rpc-url=https://eth-mainnet.alchemyapi.io/v2/KEY TOKEN_ADDRESS 'balanceOf(address)' WALLET_ADDRESS" --title "Check ERC20 Balance"</code></pre>
+        <p>You'll get back a shareable link that looks like:</p>
+        <div class="example-link">https://chainview.app/api/c/abcd123456</div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="feature-grid">
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-share-nodes"></i></div>
+            <h3>Share Commands</h3>
+            <p>Create and share Cast commands with a simple URL. Perfect for tutorials, documentation, or collaboration.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-folder-tree"></i></div>
+            <h3>Organize Collections</h3>
+            <p>Group related commands into collections. Create an ERC20 collection with common function calls.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-unlock"></i></div>
+            <h3>No Account Needed</h3>
+            <p>Just create and share. No sign-up, no authentication, just simple sharing.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-terminal"></i></div>
+            <h3>CLI Tool</h3>
+            <p>Use our simple CLI tool to create and manage commands and collections.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="examples container">
+      <h2>Example Commands</h2>
+      
+      <div class="example-card">
+        <div class="example-header">
+          <h3><i class="fas fa-coins"></i> Check ERC20 Balance</h3>
+        </div>
+        <pre><code>cast call --rpc-url=https://eth-mainnet.alchemyapi.io/v2/YOUR_KEY 0x6B175474E89094C44Da98b954EedeAC495271d0F "balanceOf(address)" 0xf977814e90da44bfa03b6295a0616a897441acec</code></pre>
+        <p class="example-desc">Checks the DAI balance of a wallet</p>
+        <a href="#" class="example-copy"><i class="fas fa-copy"></i> Copy Command</a>
+      </div>
+      
+      <div class="example-card">
+        <div class="example-header">
+          <h3><i class="fas fa-wallet"></i> Get ETH Balance</h3>
+        </div>
+        <pre><code>cast balance --rpc-url=https://eth-mainnet.alchemyapi.io/v2/YOUR_KEY 0xf977814e90da44bfa03b6295a0616a897441acec</code></pre>
+        <p class="example-desc">Gets the ETH balance of a wallet</p>
+        <a href="#" class="example-copy"><i class="fas fa-copy"></i> Copy Command</a>
+      </div>
+      
+      <div class="example-card">
+        <div class="example-header">
+          <h3><i class="fas fa-chart-pie"></i> Get Total Supply</h3>
+        </div>
+        <pre><code>cast call --rpc-url=https://eth-mainnet.alchemyapi.io/v2/YOUR_KEY 0x6B175474E89094C44Da98b954EedeAC495271d0F "totalSupply()"</code></pre>
+        <p class="example-desc">Gets the total supply of DAI token</p>
+        <a href="#" class="example-copy"><i class="fas fa-copy"></i> Copy Command</a>
+      </div>
+    </section>
+    
+    <section id="getting-started" class="getting-started container">
+      <h2>Getting Started</h2>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Install the CLI</h3>
+          <pre><code>npm install -g chainview</code></pre>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Create a Command</h3>
+          <pre><code>chainview submit "cast call --rpc-url=https://eth-mainnet.alchemyapi.io/v2/KEY 0xTOKEN 'function()' ARG" --title "My Command"</code></pre>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Create a Collection</h3>
+          <pre><code>chainview collection create "My Collection" --desc "Collection description"</code></pre>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Add Command to Collection</h3>
+          <pre><code>chainview collection add COLLECTION_ID "cast call ..." --title "New Command"</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h3><i class="fas fa-terminal"></i> ChainView</h3>
+          <p>Share blockchain commands effortlessly</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/yourusername/chainview" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+          <a href="#" target="_blank"><i class="fas fa-book"></i> Documentation</a>
+          <a href="#" target="_blank"><i class="fas fa-code"></i> API</a>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy; 2023 ChainView</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple script to handle copy functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const copyLinks = document.querySelectorAll('.example-copy');
+      copyLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const codeBlock = this.parentNode.querySelector('code');
+          navigator.clipboard.writeText(codeBlock.textContent.trim());
+          
+          const originalText = this.innerHTML;
+          this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          
+          setTimeout(() => {
+            this.innerHTML = originalText;
+          }, 2000);
+        });
+      });
+    });
+  </script>
+</body>
+</html> 
