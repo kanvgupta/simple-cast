@@ -486,4 +486,45 @@ footer a:hover {
     padding: 0.7rem 1.2rem;
     font-size: 1rem;
   }
+}
+
+/* Demo styles */
+.wide-demo {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wide-demo pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Steps */
+.vertical-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 3rem auto 0;
+}
+
+.vertical-steps .step {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-width pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Extra padding for intro section */
+.extra-padding {
+  padding-top: 8rem;
 } 

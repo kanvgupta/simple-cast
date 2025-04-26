@@ -6,7 +6,6 @@ A tool for sharing [Foundry Cast](https://book.getfoundry.sh/cast/) commands wit
 
 - Share Cast commands via unique URLs
 - Group related commands into collections
-- No accounts or authentication required
 - Simple CLI tool for creating and managing commands
 
 ## Getting Started
@@ -14,45 +13,8 @@ A tool for sharing [Foundry Cast](https://book.getfoundry.sh/cast/) commands wit
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/chainview.git
-cd chainview
-
-# Install dependencies
-npm install
-
-# Start the server
-npm start
-```
-
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```
-PORT=3000
-DATABASE_URL=postgres://username:password@localhost:5432/chainview
-NODE_ENV=development
-```
-
-### Database Setup
-
-The application uses PostgreSQL. Make sure you have it installed and running.
-
-```bash
-# Create a database
-createdb chainview
-```
-
-The server will automatically create the necessary tables on startup.
-
-## CLI Usage
-
-### Install the CLI tool
-
-```bash
-# Install globally
-npm install -g .
+# Install globally from npm
+npm install -g chainview
 ```
 
 ### Create a Command
@@ -72,6 +34,43 @@ chainview collection create "My Collection" --desc "Collection description"
 ```bash
 chainview collection add COLLECTION_ID "cast call ..." --title "New Command"
 ```
+
+## Self-Hosting
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/kanvgupta/simple-cast.git
+cd simple-cast
+
+# Install dependencies
+npm install
+
+# Start the server
+npm start
+```
+
+### Environment Variables
+
+Create a `.env` file with the following variables:
+
+```
+PORT=3000
+DATABASE_URL=postgres://username:password@localhost:5432/chainview
+NODE_ENV=production
+```
+
+### Database Setup
+
+The application uses PostgreSQL. Make sure you have it installed and running.
+
+```bash
+# Create a database
+createdb chainview
+```
+
+The server will automatically create the necessary tables on startup.
 
 ## API Endpoints
 

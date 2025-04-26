@@ -1,26 +1,53 @@
 {
-  "name": "chainview",
-  "version": "0.1.0",
+  "name": "chainview-cast",
+  "version": "0.1.1",
   "description": "Tool to share blockchain commands with ease",
-  "main": "api/index.js",
+  "main": "cli/index.js",
   "scripts": {
     "start": "node api/index.js",
     "dev": "nodemon api/index.js",
     "postinstall": "chmod +x cli/index.js",
-    "cli": "node cli/index.js"
+    "cli": "node cli/index.js",
+    "build": "echo 'Static assets already built'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting specified'"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "pg": "^8.11.3",
-    "nanoid": "^3.3.6",
     "axios": "^1.6.0",
+    "chainview-cast": "^0.1.1",
     "commander": "^11.0.0",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "nanoid": "^3.3.6",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
   "bin": {
     "chainview": "./cli/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanvgupta/simple-cast.git"
+  },
+  "keywords": [
+    "blockchain",
+    "cast",
+    "foundry",
+    "cli",
+    "ethereum",
+    "commands",
+    "sharing"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kanvgupta/simple-cast/issues"
+  },
+  "homepage": "https://chainview.kanvgupta.com",
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

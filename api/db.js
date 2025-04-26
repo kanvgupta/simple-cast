@@ -5,17 +5,17 @@ require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
 });
 
 /**
  * Initialize database tables
  */
 async function initDb() {
-    const client = await pool.connect();
-    try {
-        // Create commands table
-        await client.query(`
+  const client = await pool.connect();
+  try {
+    // Create commands table
+    await client.query(`
       CREATE TABLE IF NOT EXISTS commands (
         id VARCHAR(21) PRIMARY KEY,
         title VARCHAR(255),
@@ -27,8 +27,8 @@ async function initDb() {
       );
     `);
 
-        // Create collections table
-        await client.query(`
+    // Create collections table
+    await client.query(`
       CREATE TABLE IF NOT EXISTS collections (
         id VARCHAR(21) PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -37,17 +37,17 @@ async function initDb() {
       );
     `);
 
-        console.log('Database initialized');
-    } catch (err) {
-        console.error('Error initializing database:', err);
-    } finally {
-        client.release();
-    }
+    console.log('Database initialized');
+  } catch (err) {
+    console.error('Error initializing database:', err);
+  } finally {
+    client.release();
+  }
 }
 
 // Initialize the database on startup
 initDb();
 
 module.exports = {
-    query: (text, params) => pool.query(text, params),
+  query: (text, params) => pool.query(text, params),
 }; 

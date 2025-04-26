@@ -10,118 +10,118 @@ const router = express.Router();
  * View a command by ID
  */
 router.get('/c/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const result = await db.query(
-            'SELECT id, title, raw, rpc_url, parsed, collection_id, created_at FROM commands WHERE id = $1',
-            [id]
-        );
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      'SELECT id, title, raw, rpc_url, parsed, collection_id, created_at FROM commands WHERE id = $1',
+      [id]
+    );
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Command not found' });
-        }
-
-        // Get collection info if part of a collection
-        let collection = null;
-        if (result.rows[0].collection_id) {
-            const collectionResult = await db.query(
-                'SELECT id, title FROM collections WHERE id = $1',
-                [result.rows[0].collection_id]
-            );
-            if (collectionResult.rows.length > 0) {
-                collection = collectionResult.rows[0];
-            }
-        }
-
-        // Format the response
-        const command = {
-            ...result.rows[0],
-            collection
-        };
-
-        // For HTML request, render a nice page
-        if (req.headers.accept && req.headers.accept.includes('text/html')) {
-            res.send(commandHtml(command));
-        } else {
-            // For API requests, return JSON
-            res.json(command);
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Command not found' });
     }
+
+    // Get collection info if part of a collection
+    let collection = null;
+    if (result.rows[0].collection_id) {
+      const collectionResult = await db.query(
+        'SELECT id, title FROM collections WHERE id = $1',
+        [result.rows[0].collection_id]
+      );
+      if (collectionResult.rows.length > 0) {
+        collection = collectionResult.rows[0];
+      }
+    }
+
+    // Format the response
+    const command = {
+      ...result.rows[0],
+      collection
+    };
+
+    // For HTML request, render a nice page
+    if (req.headers.accept && req.headers.accept.includes('text/html')) {
+      res.send(commandHtml(command));
+    } else {
+      // For API requests, return JSON
+      res.json(command);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 /**
  * View a collection by ID
  */
 router.get('/col/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-        // Get collection details
-        const collectionResult = await db.query(
-            'SELECT id, title, description, created_at FROM collections WHERE id = $1',
-            [id]
-        );
+    // Get collection details
+    const collectionResult = await db.query(
+      'SELECT id, title, description, created_at FROM collections WHERE id = $1',
+      [id]
+    );
 
-        if (collectionResult.rows.length === 0) {
-            return res.status(404).json({ error: 'Collection not found' });
-        }
-
-        // Get commands in this collection
-        const commandsResult = await db.query(
-            'SELECT id, title, raw, rpc_url, created_at FROM commands WHERE collection_id = $1 ORDER BY created_at',
-            [id]
-        );
-
-        // Format the response
-        const collection = {
-            ...collectionResult.rows[0],
-            commands: commandsResult.rows
-        };
-
-        // For HTML request, render a nice page
-        if (req.headers.accept && req.headers.accept.includes('text/html')) {
-            res.send(collectionHtml(collection));
-        } else {
-            // For API requests, return JSON
-            res.json(collection);
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    if (collectionResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Collection not found' });
     }
+
+    // Get commands in this collection
+    const commandsResult = await db.query(
+      'SELECT id, title, raw, rpc_url, created_at FROM commands WHERE collection_id = $1 ORDER BY created_at',
+      [id]
+    );
+
+    // Format the response
+    const collection = {
+      ...collectionResult.rows[0],
+      commands: commandsResult.rows
+    };
+
+    // For HTML request, render a nice page
+    if (req.headers.accept && req.headers.accept.includes('text/html')) {
+      res.send(collectionHtml(collection));
+    } else {
+      // For API requests, return JSON
+      res.json(collection);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 /**
  * HTML template for command display
  */
 function commandHtml(command) {
-    // Extract parameters with -- flags
-    const extractParams = (cmd) => {
-        const params = [];
-        const regex = /--([a-zA-Z0-9_-]+)(?:[=\s]([^\s"']+|"[^"]*"|'[^']*'))?/g;
-        let match;
+  // Extract parameters with -- flags
+  const extractParams = (cmd) => {
+    const params = [];
+    const regex = /--([a-zA-Z0-9_-]+)(?:[=\s]([^\s"']+|"[^"]*"|'[^']*'))?/g;
+    let match;
 
-        while ((match = regex.exec(cmd)) !== null) {
-            let paramName = match[1];
-            let paramValue = match[2] || '';
+    while ((match = regex.exec(cmd)) !== null) {
+      let paramName = match[1];
+      let paramValue = match[2] || '';
 
-            // Remove quotes if present
-            if (paramValue.startsWith('"') && paramValue.endsWith('"') ||
-                paramValue.startsWith("'") && paramValue.endsWith("'")) {
-                paramValue = paramValue.substring(1, paramValue.length - 1);
-            }
+      // Remove quotes if present
+      if (paramValue.startsWith('"') && paramValue.endsWith('"') ||
+        paramValue.startsWith("'") && paramValue.endsWith("'")) {
+        paramValue = paramValue.substring(1, paramValue.length - 1);
+      }
 
-            params.push({ name: paramName, value: paramValue });
-        }
+      params.push({ name: paramName, value: paramValue });
+    }
 
-        return params;
-    };
+    return params;
+  };
 
-    const params = extractParams(command.raw);
+  const params = extractParams(command.raw);
 
-    // Generate form fields for parameters
-    const paramFields = params.map(param => `
+  // Generate form fields for parameters
+  const paramFields = params.map(param => `
         <div class="param-field">
             <label for="${param.name}">--${param.name}</label>
             <input type="text" id="${param.name}" name="${param.name}" value="${param.value}" 
@@ -129,7 +129,7 @@ function commandHtml(command) {
         </div>
     `).join('');
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -234,7 +234,7 @@ function commandHtml(command) {
   </button>
   
   ${command.collection ?
-            `<div class="collection-link">
+      `<div class="collection-link">
       Part of collection: <a href="/api/col/${command.collection.id}">${command.collection.title}</a>
     </div>` : ''}
     
@@ -292,14 +292,14 @@ function commandHtml(command) {
  * HTML template for collection display
  */
 function collectionHtml(collection) {
-    const commandsHtml = collection.commands.map(cmd => `
+  const commandsHtml = collection.commands.map(cmd => `
     <li>
       <a href="/api/c/${cmd.id}">${cmd.title || 'Untitled Command'}</a>
       <div class="command-preview">${cmd.raw}</div>
     </li>
   `).join('');
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">

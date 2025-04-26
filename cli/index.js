@@ -10,13 +10,13 @@ const axios = require('axios');
 // Create commander program
 const program = new Command();
 
-// Set API URL - default to localhost for development
-const API_URL = process.env.CHAINVIEW_API_URL || 'http://localhost:3000/api';
+// Set API URL - use environment variable or default to production
+const API_URL = process.env.CHAINVIEW_API_URL || 'https://chainview.kanvgupta.com/api';
 
 // Program info
 program
     .name('chainview')
-    .description('CLI tool for sharing Cast commands')
+    .description('CLI tool for sharing blockchain commands')
     .version('0.1.0');
 
 /**
@@ -25,13 +25,45 @@ program
 program
     .command('submit')
     .description('Submit a new Cast command')
-    .argument('<command>', 'The Cast command to submit')
+    .allowUnknownOption(true)
     .option('-t, --title <title>', 'Title for the command')
-    .action(async (command, options) => {
+    .action(async (options) => {
         try {
+            // Extract the cast command by handling it specially
+            const args = process.argv;
+            const submitIndex = args.indexOf('submit');
+
+            if (submitIndex === -1 || submitIndex === args.length - 1) {
+                throw new Error('No cast command provided');
+            }
+
+            // Find where the title option starts, if present
+            let titleIndex = -1;
+            for (let i = submitIndex + 1; i < args.length; i++) {
+                if (args[i] === '-t' || args[i] === '--title') {
+                    titleIndex = i;
+                    break;
+                }
+            }
+
+            // Extract the cast command - everything between 'submit' and the title option
+            let castCommand;
+            if (titleIndex !== -1) {
+                castCommand = args.slice(submitIndex + 1, titleIndex).join(' ');
+            } else {
+                castCommand = args.slice(submitIndex + 1).join(' ');
+            }
+
+            // Trim any extra quotes that might have been added by the shell
+            castCommand = castCommand.trim();
+            if ((castCommand.startsWith('"') && castCommand.endsWith('"')) ||
+                (castCommand.startsWith("'") && castCommand.endsWith("'"))) {
+                castCommand = castCommand.substring(1, castCommand.length - 1);
+            }
+
             const response = await axios.post(`${API_URL}/commands`, {
-                raw: command,
-                title: options.title
+                raw: castCommand,
+                title: options.title || 'Untitled Command'
             });
 
             console.log('Command created successfully!');
@@ -81,13 +113,46 @@ collectionCommand
     .command('add')
     .description('Add a new command to a collection')
     .argument('<collection-id>', 'ID of the collection')
-    .argument('<command>', 'The Cast command to add')
+    .allowUnknownOption(true)
     .option('-t, --title <title>', 'Title for the command')
-    .action(async (collectionId, command, options) => {
+    .action(async (collectionId, options) => {
         try {
+            // Extract the cast command by handling it specially
+            const args = process.argv;
+            const addIndex = args.indexOf('add');
+            const collectionIdIndex = addIndex + 1;
+
+            if (addIndex === -1 || collectionIdIndex >= args.length) {
+                throw new Error('Missing collection ID or cast command');
+            }
+
+            // Find where the title option starts, if present
+            let titleIndex = -1;
+            for (let i = collectionIdIndex + 1; i < args.length; i++) {
+                if (args[i] === '-t' || args[i] === '--title') {
+                    titleIndex = i;
+                    break;
+                }
+            }
+
+            // Extract the cast command - everything between collection ID and the title option
+            let castCommand;
+            if (titleIndex !== -1) {
+                castCommand = args.slice(collectionIdIndex + 1, titleIndex).join(' ');
+            } else {
+                castCommand = args.slice(collectionIdIndex + 1).join(' ');
+            }
+
+            // Trim any extra quotes that might have been added by the shell
+            castCommand = castCommand.trim();
+            if ((castCommand.startsWith('"') && castCommand.endsWith('"')) ||
+                (castCommand.startsWith("'") && castCommand.endsWith("'"))) {
+                castCommand = castCommand.substring(1, castCommand.length - 1);
+            }
+
             const response = await axios.post(`${API_URL}/collections/${collectionId}/commands`, {
-                raw: command,
-                title: options.title
+                raw: castCommand,
+                title: options.title || 'Untitled Command'
             });
 
             console.log('Command added to collection successfully!');

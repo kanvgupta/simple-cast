@@ -1,0 +1,46 @@
+# Server files
+api/
+public/
+.env
+
+# Development files
+.git/
+.github/
+.gitignore
+nodemon.json
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE configs
+.idea/
+.vscode/
+*.sublime-*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Tests
+test/
+coverage/
+.nyc_output/
+
+# Dependency directories
+node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db 
